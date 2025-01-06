@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 from torch import Tensor
 
@@ -12,7 +13,7 @@ class TransformerEncoder(Encoder):
     def __init__(self,args):
         super(TransformerEncoder, self).__init__()
 
-        self.pe = PositionalEncoding(args['encoder_dim'])
+        self.pe = PositionalEncoding(args['pose_embedding_dim']) # args['encoder_dim']
         self.emb_dropout = nn.Dropout(p=args['encdoer_emb_dropout'])
 
         self.layers = nn.ModuleList(
@@ -32,10 +33,12 @@ class TransformerEncoder(Encoder):
         self.output_layer = nn.Linear(args['encoder_dim'], args['encoder_dim'])
         self._output_size = args['encoder_dim']
 
-    def forward(self, embed_src: Tensor) -> (Tensor):
-         
+    def forward(self, embed_src: Tensor, sub=None) -> (Tensor):
+        
         x = self.pe(embed_src)
         x = self.emb_dropout(x)
+        if sub is not None:
+            x = torch.cat([x, sub], dim=2)
 
         for layer in self.layers:
             x = layer(x, mask=None)

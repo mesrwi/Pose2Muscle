@@ -1,15 +1,5 @@
-import random
-import numpy as np
-import torch
+import math
 from torch import nn
-
-def set_seed(seed: int):
-    '''
-    Set the random seed for modules torch, numpy and random.
-    '''
-    torch.manual_seed(seed)
-    np.random.seed(seed)
-    random.seed(seed)
 
 def get_activation(activation_type):
     if activation_type == "relu":
@@ -38,3 +28,12 @@ def get_activation(activation_type):
         return nn.Tanhshrink()
     else:
         raise ValueError("Unknown activation type {}".format(activation_type))
+
+def initialize_model(model):
+    for name, param in model.named_parameters():
+        if 'norm' in name:
+            continue
+        if name.endswith('bias'):
+            param.data.fill_(0)
+        else:
+            nn.init.kaiming_normal_(param.data)
