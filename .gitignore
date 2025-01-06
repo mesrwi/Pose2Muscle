@@ -2,7 +2,13 @@
 __pycache__/
 lightning_logs/
 wandb/
-zxcv.txt
+zxcv.ipynb
+zxcv copy.ipynb
 dataset/
 datasplit/
 resampled_emg_rms_fixed.csv
+r2_-3.4871.mp4
+r2_-29.mp4
+r2_0.5846.mp4
+r2_-61.mp4
+r2_0.7641.mp4
